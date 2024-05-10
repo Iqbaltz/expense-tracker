@@ -4,6 +4,7 @@ import Link from "next/link";
 import ExpenseChart from "./components/expense-chart/ExpenseChart";
 import PaginationChart from "./components/pagination-chart/PaginationChart";
 import { useState } from "react";
+import ExpenseList from "./components/expense-list/ExpenseList";
 
 type DateRange = {
   start: Date;
@@ -33,7 +34,6 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="w-full max-w-5xl">
         <h1 className="text-xl mb-8">Expense Tracker</h1>
-
         <ExpenseChart start={start} end={end} />
         <PaginationChart
           start={start}
@@ -47,6 +47,7 @@ export default function Home() {
             <button className="btn">Add Expense</button>
           </Link>
         </div>
+        <ExpenseList start={start} end={end} />
       </div>
     </main>
   );

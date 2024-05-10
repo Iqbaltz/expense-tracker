@@ -73,13 +73,7 @@ export default function SubmitForm({}: Props) {
         <label className="label" htmlFor="notes">
           Notes
         </label>
-        <input
-          required
-          type="text"
-          className="input"
-          placeholder="Notes"
-          name="notes"
-        />
+        <input type="text" className="input" placeholder="Notes" name="notes" />
       </div>
       <div className="form-control">
         <label className="label" htmlFor="date">

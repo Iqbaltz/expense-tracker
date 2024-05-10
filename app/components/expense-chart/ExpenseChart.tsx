@@ -1,4 +1,5 @@
 "use client";
+import { filterdataBetweenDate } from "@/src/helper/filterdataBetweenDate";
 import React, { useEffect, useState } from "react";
 import {
   Bar,
@@ -42,10 +43,7 @@ export default function ExpenseChart({ start, end }: Props) {
       ? JSON.parse(localStorage.getItem("expenses")!)
       : [];
 
-    const filteredExpenses = localData.filter((expense: ExpenseEntity) => {
-      const expenseDate = new Date(expense.date);
-      return expenseDate >= start && expenseDate <= end;
-    });
+    const filteredExpenses = filterdataBetweenDate(localData, start, end);
     setExpenses(filteredExpenses);
   }, [start, end]);
 
