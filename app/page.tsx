@@ -5,6 +5,7 @@ import ExpenseChart from "./components/expense-chart/ExpenseChart";
 import PaginationChart from "./components/pagination-chart/PaginationChart";
 import { useState } from "react";
 import ExpenseList from "./components/expense-list/ExpenseList";
+import { PlusCircle } from "lucide-react";
 
 type DateRange = {
   start: Date;
@@ -44,7 +45,10 @@ export default function Home() {
         <CategoryPercentage />
         <div className="flex justify-center mt-4">
           <Link href={"/expense"}>
-            <button className="btn">Add Expense</button>
+            <button className="btn btn-success text-white">
+              <PlusCircle />
+              Add Expense
+            </button>
           </Link>
         </div>
         <ExpenseList start={start} end={end} />
