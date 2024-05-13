@@ -9,6 +9,7 @@ interface ExpenseContextType {
   filteredExpenses: ExpenseEntity[];
   setExpenses: (expenses: ExpenseEntity[]) => void;
   addExpense: (newExpense: ExpenseEntity) => void;
+  getExpensesById: (id: number) => ExpenseEntity | undefined | void;
   updateExpense: (updatedExpense: ExpenseEntity) => void;
   removeExpense: (id: number) => void;
   handlePrevious: () => void;
@@ -22,6 +23,7 @@ export const ExpenseContext = createContext<ExpenseContextType>({
   expenses: [],
   filteredExpenses: [],
   setExpenses: () => {},
+  getExpensesById: () => {},
   addExpense: () => {},
   updateExpense: () => {},
   removeExpense: () => {},
@@ -104,10 +106,15 @@ export const ExpenseProvider: React.FC<{ children: React.ReactNode }> = ({
     setFilteredExpenses(filterdataBetweenDate(updatedExpenses, start, end));
   };
 
+  const getExpensesById = (id: number) => {
+    return expenses.find((expense) => expense.id === id);
+  };
+
   return (
     <ExpenseContext.Provider
       value={{
         expenses,
+        getExpensesById,
         filteredExpenses,
         setExpenses,
         addExpense,
