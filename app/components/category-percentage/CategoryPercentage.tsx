@@ -1,9 +1,10 @@
 "use client";
+import { ExpenseContext } from "@/src/context/ExpenseContext";
 import { ExpenseEntity } from "@/src/entity/ExpenseEntity";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export default function CategoryPercentage() {
-  const [data, setdata] = useState([] as ExpenseEntity[]);
+  const { filteredExpenses: data } = useContext(ExpenseContext);
 
   // function to calculate the percentage of each category
   function calculateCategoryPercentage(
@@ -29,16 +30,6 @@ export default function CategoryPercentage() {
       percentage: Math.round((categoryAmounts[category] / totalAmount) * 100),
     }));
   }
-
-  useEffect(() => {
-    const localData = localStorage?.getItem("expenses")
-      ? JSON.parse(localStorage?.getItem("expenses")!)
-      : null;
-
-    if (localData) {
-      setdata(localData);
-    }
-  }, []);
 
   return (
     <div className="flex gap-2">

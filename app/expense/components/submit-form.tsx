@@ -1,12 +1,14 @@
 "use client";
 import { Categories, CategoriesEntity } from "@/src/constants/Categories";
+import { ExpenseContext } from "@/src/context/ExpenseContext";
 import { ExpenseEntity } from "@/src/entity/ExpenseEntity";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useContext } from "react";
 
 type Props = {};
 
 export default function SubmitForm({}: Props) {
+  const { addExpense, expenses } = useContext(ExpenseContext);
   const router = useRouter();
 
   function handleSubmit(event: React.FormEvent) {
@@ -18,10 +20,8 @@ export default function SubmitForm({}: Props) {
     const notes = formData.get("notes") as string;
     const date = formData.get("date") as string;
 
-    const expenses = JSON.parse(localStorage.getItem("expenses") || "[]");
-
     const newExpense: ExpenseEntity = {
-      id: expenses.length + 1,
+      id: expenses.length ? expenses[expenses.length - 1].id + 1 : 1,
       date,
       amount: parseInt(amount),
       category,
@@ -29,10 +29,8 @@ export default function SubmitForm({}: Props) {
       sync: false,
     };
 
-    expenses.push(newExpense);
-    window?.localStorage?.setItem("expenses", JSON.stringify(expenses));
+    addExpense(newExpense);
     form.reset();
-
     router.push("/");
   }
 

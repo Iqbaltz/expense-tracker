@@ -1,24 +1,12 @@
 "use client";
+import { ExpenseContext } from "@/src/context/ExpenseContext";
+import { formatDate } from "@/src/helper/formatDate";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import React from "react";
+import React, { useContext } from "react";
 
-type Props = {
-  handlePrevious: () => void;
-  handleNext: () => void;
-  start: Date;
-  end: Date;
-};
+export default function PaginationChart() {
+  const { start, end, handleNext, handlePrevious } = useContext(ExpenseContext);
 
-const formatDate = (date: Date): string => {
-  return date.toLocaleDateString("en-US", { day: "2-digit", month: "short" });
-};
-
-export default function PaginationChart({
-  handleNext,
-  handlePrevious,
-  start,
-  end,
-}: Props) {
   return (
     <div className="join flex justify-center mb-4">
       <button className="join-item btn" onClick={handlePrevious}>

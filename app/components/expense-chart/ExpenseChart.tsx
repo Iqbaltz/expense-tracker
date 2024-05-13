@@ -1,6 +1,7 @@
 "use client";
+import { ExpenseContext } from "@/src/context/ExpenseContext";
 import { filterdataBetweenDate } from "@/src/helper/filterdataBetweenDate";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -27,25 +28,11 @@ type ExpenseEntity = {
   amount: number;
 };
 
-type Props = {
-  start: Date;
-  end: Date;
-};
-
-export default function ExpenseChart({ start, end }: Props) {
-  const [expenses, setExpenses] = useState<ExpenseEntity[]>([]);
+export default function ExpenseChart() {
+  const { filteredExpenses: expenses } = useContext(ExpenseContext);
   const [aggregatedData, setAggregatedData] = useState([
     ...initialTemplateData,
   ]);
-
-  useEffect(() => {
-    const localData = localStorage.getItem("expenses")
-      ? JSON.parse(localStorage.getItem("expenses")!)
-      : [];
-
-    const filteredExpenses = filterdataBetweenDate(localData, start, end);
-    setExpenses(filteredExpenses);
-  }, [start, end]);
 
   useEffect(() => {
     const aggregateExpensesByDate = (expenses: ExpenseEntity[]) => {
