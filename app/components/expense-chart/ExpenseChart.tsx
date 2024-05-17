@@ -1,6 +1,7 @@
 "use client";
 import { ExpenseContext } from "@/src/context/ExpenseContext";
 import { filterdataBetweenDate } from "@/src/helper/filterdataBetweenDate";
+import { numberToRupiah } from "@/src/helper/numberToRupiah";
 import React, { useContext, useEffect, useState } from "react";
 import {
   Bar,
@@ -62,17 +63,42 @@ export default function ExpenseChart() {
     setAggregatedData(newData);
   }, [expenses]);
 
+  const formatTick = (value: number) => {
+    // if value is thousand then add k
+    if (value >= 1000000) {
+      return `${value / 1000000}M`;
+    } else if (value >= 1000) {
+      return `${value / 1000}k`;
+    }
+    return String(value);
+  };
+
+  const renderCustomTooltip = (props: any) => {
+    const { active, payload } = props;
+
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white text-primary p-2 shadow-lg rounded-md">
+          <p>{payload[0].payload.date}</p>
+          <p>{numberToRupiah(payload[0].value)}</p>
+        </div>
+      );
+    }
+
+    return null;
+  };
+
+  const formatXAxis = (tickItem: string) => {
+    return tickItem.slice(0, 3);
+  };
+
   return (
     <div className="w-full h-80">
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart
-          data={aggregatedData}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
-          <YAxis />
-          <Tooltip />
+        <BarChart data={aggregatedData}>
+          <XAxis dataKey="date" tickFormatter={formatXAxis} minTickGap={0} />
+          <YAxis tickFormatter={formatTick} width={40} />
+          <Tooltip content={renderCustomTooltip} />
           <Bar
             dataKey="amount"
             fill="#8884d8"

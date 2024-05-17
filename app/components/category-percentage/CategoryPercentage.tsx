@@ -32,7 +32,7 @@ export default function CategoryPercentage() {
   }
 
   return (
-    <div className="flex gap-2">
+    <div className="flex flex-wrap gap-2">
       {calculateCategoryPercentage(data).map((category) => (
         <div
           key={category.category}
