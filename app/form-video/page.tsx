@@ -9,10 +9,21 @@ export default function FormVideoPage() {
     setVideoFinished(true);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const data = new FormData(e.currentTarget);
+    const name = data.get("name") as string;
+    const date = new Date().toISOString().split("T")[0];
+    const time = new Date().toLocaleTimeString();
+
     if (videoFinished) {
-      alert("Form submitted!");
+      await fetch(
+        "https://script.google.com/macros/s/AKfycbxmlChZAKnZjXhG6cEHFDiwEMU28tJbtfK2pLBzH2ysnRf1ha8_u2EDPc7OH6_698TC/exec",
+        { method: "POST", body: JSON.stringify({ name, date, time }) }
+      ).then(() => {
+        alert("Data berhasil disimpan.");
+      });
     } else {
       alert("Please finish watching the video first.");
     }
@@ -34,6 +45,7 @@ export default function FormVideoPage() {
           iframeClassName="w-full h-[200px]"
           onEnd={onEnd}
         />
+        <p>Mohon isi nama anda setelah menonton video di atas!</p>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col mb-3">
             <label className="text-sm font-semibold mb-1" htmlFor="name">
@@ -48,19 +60,7 @@ export default function FormVideoPage() {
               disabled={!videoFinished}
             />
           </div>
-          <div className="flex flex-col mb-3">
-            <label className="text-sm font-semibold mb-1" htmlFor="date">
-              Tanggal
-            </label>
-            <input
-              className="bg-white rounded-md border px-2 py-1 outline-none"
-              type="date"
-              id="date"
-              name="date"
-              required
-              disabled={!videoFinished}
-            />
-          </div>
+
           <button
             type="submit"
             className="mt-2 btn btn-dark w-full text-white"
