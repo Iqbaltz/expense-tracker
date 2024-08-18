@@ -1,6 +1,6 @@
 "use client";
 import { Categories, CategoriesEntity } from "@/src/constants/Categories";
-import { ExpenseContext } from "@/src/context/ExpenseContext";
+import { IncomeContext } from "@/src/context/IncomeContext";
 import { ExpenseEntity } from "@/src/entity/ExpenseEntity";
 import { useRouter } from "next/navigation";
 import React, { useContext } from "react";
@@ -8,7 +8,7 @@ import React, { useContext } from "react";
 type Props = {};
 
 export default function SubmitForm({}: Props) {
-  const { addExpense, expenses } = useContext(ExpenseContext);
+  const { addIncome, incomes } = useContext(IncomeContext);
   const router = useRouter();
 
   function handleSubmit(event: React.FormEvent) {
@@ -21,7 +21,7 @@ export default function SubmitForm({}: Props) {
     const date = formData.get("date") as string;
 
     const newExpense: ExpenseEntity = {
-      id: expenses.length ? expenses[expenses.length - 1].id + 1 : 1,
+      id: incomes.length ? incomes[incomes.length - 1].id + 1 : 1,
       date,
       amount: parseInt(amount),
       category,
@@ -29,14 +29,14 @@ export default function SubmitForm({}: Props) {
       sync: false,
     };
 
-    addExpense(newExpense);
+    addIncome(newExpense);
     form.reset();
     router.push("/");
   }
 
   return (
     <form onSubmit={handleSubmit} className="card-body">
-      <h1 className="card-title">Expense Page</h1>
+      <h1 className="card-title">Income Page</h1>
       <div className="form-control">
         <label className="label" htmlFor="amount">
           Amount

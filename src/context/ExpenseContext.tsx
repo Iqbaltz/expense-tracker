@@ -1,83 +1,68 @@
 "use client";
-import React, { createContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { ExpenseEntity } from "../entity/ExpenseEntity";
 import { filterdataBetweenDate } from "../helper/filterdataBetweenDate";
 
-// Define the context shape to include expenses array and methods for updating it
 interface ExpenseContextType {
   expenses: ExpenseEntity[];
   filteredExpenses: ExpenseEntity[];
   setExpenses: (expenses: ExpenseEntity[]) => void;
   addExpense: (newExpense: ExpenseEntity) => void;
-  getExpensesById: (id: number) => ExpenseEntity | undefined | void;
+  getExpensesById: (id: number) => ExpenseEntity | undefined;
   updateExpense: (updatedExpense: ExpenseEntity) => void;
   removeExpense: (id: number) => void;
-  handlePrevious: () => void;
-  handleNext: () => void;
   start: Date;
   end: Date;
+  handlePrevious: () => void;
+  handleNext: () => void;
 }
 
-// Create the ExpenseContext with initial default values
 export const ExpenseContext = createContext<ExpenseContextType>({
   expenses: [],
   filteredExpenses: [],
   setExpenses: () => {},
-  getExpensesById: () => {},
   addExpense: () => {},
+  getExpensesById: () => undefined,
   updateExpense: () => {},
   removeExpense: () => {},
-  handlePrevious: () => {},
-  handleNext: () => {},
   start: new Date(),
   end: new Date(),
+  handlePrevious: () => {},
+  handleNext: () => {},
 });
 
-type DateRange = {
-  start: Date;
-  end: Date;
-};
-
-const getWeekRange = (current: Date): DateRange => {
+const getWeekRange = (current: Date) => {
   const start = new Date(current.setDate(current.getDate() - current.getDay()));
   const end = new Date(start.getTime());
   end.setDate(end.getDate() + 6);
   return { start, end };
 };
 
-// Create the ExpenseProvider component
 export const ExpenseProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [expenses, setExpenses] = useState<ExpenseEntity[]>([]);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [filteredExpenses, setFilteredExpenses] = useState<ExpenseEntity[]>([]);
+  const [start, setStart] = useState(new Date());
+  const [end, setEnd] = useState(new Date());
 
-  const { start, end } = useMemo(
-    () => getWeekRange(currentDate),
-    [currentDate]
-  );
+  useEffect(() => {
+    const { start, end } = getWeekRange(currentDate);
+    setStart(start);
+    setEnd(end);
+    console.log("startt", start);
+  }, [currentDate]);
 
-  const handlePrevious = () => {
-    setCurrentDate(new Date(currentDate.setDate(currentDate.getDate() - 7)));
-  };
-
-  const handleNext = () => {
-    setCurrentDate(new Date(currentDate.setDate(currentDate.getDate() + 7)));
-  };
-
-  // Fetch expenses data from localStorage on component mount
   useEffect(() => {
     const storedExpenses = localStorage.getItem("expenses");
     if (storedExpenses) {
-      setExpenses(JSON.parse(storedExpenses));
-      setFilteredExpenses(
-        filterdataBetweenDate(JSON.parse(storedExpenses), start, end)
-      );
+      const parsedExpenses = JSON.parse(storedExpenses);
+      setExpenses(parsedExpenses);
+      setFilteredExpenses(filterdataBetweenDate(parsedExpenses, start, end));
     }
   }, []);
 
-  // Filter expenses data based on the current week
   useEffect(() => {
     setFilteredExpenses(filterdataBetweenDate(expenses, start, end));
   }, [start, end, expenses]);
@@ -89,7 +74,6 @@ export const ExpenseProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.setItem("expenses", JSON.stringify(updatedExpenses));
   };
 
-  // Helper function to update an individual expense
   const updateExpense = (updatedExpense: ExpenseEntity) => {
     const updatedExpenses = expenses.map((expense) =>
       expense.id === updatedExpense.id ? updatedExpense : expense
@@ -101,29 +85,47 @@ export const ExpenseProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const removeExpense = (id: number) => {
     const updatedExpenses = expenses.filter((expense) => expense.id !== id);
-    localStorage.setItem("expenses", JSON.stringify(updatedExpenses));
     setExpenses(updatedExpenses);
     setFilteredExpenses(filterdataBetweenDate(updatedExpenses, start, end));
+    localStorage.setItem("expenses", JSON.stringify(updatedExpenses));
   };
 
   const getExpensesById = (id: number) => {
     return expenses.find((expense) => expense.id === id);
   };
 
+  const handlePrevious = () => {
+    setCurrentDate((prevDate) => {
+      const newDate = new Date(prevDate);
+      newDate.setDate(prevDate.getDate() - 7);
+      console.log("newDtae", newDate);
+      return newDate;
+    });
+    console.log("handle previous expense", currentDate);
+  };
+
+  const handleNext = () => {
+    setCurrentDate((prevDate) => {
+      const newDate = new Date(prevDate);
+      newDate.setDate(prevDate.getDate() + 7);
+      return newDate;
+    });
+  };
+
   return (
     <ExpenseContext.Provider
       value={{
         expenses,
-        getExpensesById,
         filteredExpenses,
         setExpenses,
         addExpense,
         updateExpense,
         removeExpense,
-        handlePrevious,
-        handleNext,
+        getExpensesById,
         start,
         end,
+        handlePrevious,
+        handleNext,
       }}
     >
       {children}

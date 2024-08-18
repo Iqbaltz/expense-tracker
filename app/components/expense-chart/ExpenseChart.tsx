@@ -1,5 +1,7 @@
 "use client";
 import { ExpenseContext } from "@/src/context/ExpenseContext";
+import { IncomeContext } from "@/src/context/IncomeContext";
+import { IncomeEntity } from "@/src/entity/IncomeEntity";
 import { filterdataBetweenDate } from "@/src/helper/filterdataBetweenDate";
 import { numberToRupiah } from "@/src/helper/numberToRupiah";
 import React, { useContext, useEffect, useState } from "react";
@@ -15,13 +17,13 @@ import {
 } from "recharts";
 
 const initialTemplateData = [
-  { date: "Sunday", amount: 0 },
-  { date: "Monday", amount: 0 },
-  { date: "Tuesday", amount: 0 },
-  { date: "Wednesday", amount: 0 },
-  { date: "Thursday", amount: 0 },
-  { date: "Friday", amount: 0 },
-  { date: "Saturday", amount: 0 },
+  { date: "Sunday", income: 0, expense: 0 },
+  { date: "Monday", income: 0, expense: 0 },
+  { date: "Tuesday", income: 0, expense: 0 },
+  { date: "Wednesday", income: 0, expense: 0 },
+  { date: "Thursday", income: 0, expense: 0 },
+  { date: "Friday", income: 0, expense: 0 },
+  { date: "Saturday", income: 0, expense: 0 },
 ];
 
 type ExpenseEntity = {
@@ -31,13 +33,18 @@ type ExpenseEntity = {
 
 export default function ExpenseChart() {
   const { filteredExpenses: expenses } = useContext(ExpenseContext);
-  const [aggregatedData, setAggregatedData] = useState([
+  const { filteredIncomes: incomes } = useContext(IncomeContext);
+  const [aggregatedData, setAggregatedData] = useState<any>([
     ...initialTemplateData,
   ]);
 
   useEffect(() => {
-    const aggregateExpensesByDate = (expenses: ExpenseEntity[]) => {
+    const aggregateExpensesByDate = (
+      expenses: ExpenseEntity[],
+      incomes: IncomeEntity[]
+    ) => {
       const aggregatedExpenses: { [key: string]: number } = {};
+      const aggregatedIncomes: { [key: string]: number } = {};
 
       for (const expense of expenses) {
         const dateKey = new Date(expense.date).toLocaleDateString("en-US", {
@@ -51,17 +58,30 @@ export default function ExpenseChart() {
         }
       }
 
+      for (const income of incomes) {
+        const dateKey = new Date(income.date).toLocaleDateString("en-US", {
+          weekday: "long",
+        });
+
+        if (aggregatedIncomes[dateKey]) {
+          aggregatedIncomes[dateKey] += income.amount;
+        } else {
+          aggregatedIncomes[dateKey] = income.amount;
+        }
+      }
+
       const newAggregatedData = initialTemplateData.map((day) => ({
         ...day,
-        amount: aggregatedExpenses[day.date] || 0,
+        expense: aggregatedExpenses[day?.date!] || 0,
+        income: aggregatedIncomes[day?.date!] || 0,
       }));
 
       return newAggregatedData;
     };
 
-    const newData = aggregateExpensesByDate(expenses);
+    const newData = aggregateExpensesByDate(expenses, incomes);
     setAggregatedData(newData);
-  }, [expenses]);
+  }, [expenses, incomes]);
 
   const formatTick = (value: number) => {
     // if value is thousand then add k
@@ -78,7 +98,7 @@ export default function ExpenseChart() {
 
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white text-primary p-2 shadow-lg rounded-md">
+        <div className="bg-white shadow-lg p-2 rounded-md text-primary">
           <p>{payload[0].payload.date}</p>
           <p>{numberToRupiah(payload[0].value)}</p>
         </div>
@@ -100,7 +120,12 @@ export default function ExpenseChart() {
           <YAxis tickFormatter={formatTick} width={40} />
           <Tooltip content={renderCustomTooltip} />
           <Bar
-            dataKey="amount"
+            dataKey="income"
+            fill="#82ca9d"
+            activeBar={<Rectangle fill="green" stroke="yellow" />}
+          />
+          <Bar
+            dataKey="expense"
             fill="#8884d8"
             activeBar={<Rectangle fill="pink" stroke="blue" />}
           />
