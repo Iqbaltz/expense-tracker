@@ -38,6 +38,8 @@ export default function ExpenseChart() {
     ...initialTemplateData,
   ]);
 
+  console.log("filteredIncomes", incomes);
+
   useEffect(() => {
     const aggregateExpensesByDate = (
       expenses: ExpenseEntity[],

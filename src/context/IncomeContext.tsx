@@ -33,8 +33,12 @@ export const IncomeContext = createContext<IncomeContextType>({
 
 const getWeekRange = (current: Date) => {
   const start = new Date(current.setDate(current.getDate() - current.getDay()));
+  start.setHours(0, 0, 0, 0); // Set start time to 00:00:00
+
   const end = new Date(start.getTime());
   end.setDate(end.getDate() + 6);
+  end.setHours(0, 0, 0, 0); // Set end time to 00:00:00
+
   return { start, end };
 };
 
@@ -55,7 +59,10 @@ export const IncomeProvider: React.FC<{ children: React.ReactNode }> = ({
     if (storedIncomes) {
       const parsedIncomes = JSON.parse(storedIncomes);
       setIncomes(parsedIncomes);
+      console.log("incomes", parsedIncomes);
       setFilteredIncomes(filterdataBetweenDate(parsedIncomes, start, end));
+      console.log("start", start);
+      console.log("end", end);
     }
   }, []);
 

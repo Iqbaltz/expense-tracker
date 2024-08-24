@@ -14,7 +14,7 @@ export default function Home() {
         <ExpenseChart />
         <PaginationChart />
         <CategoryPercentage />
-        <div className="flex justify-center gap-4 mt-4">
+        <div className="flex justify-center gap-8 mt-4">
           <Link href={"/income"}>
             <button className="text-white btn btn-success">
               <PlusCircle />

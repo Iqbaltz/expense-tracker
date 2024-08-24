@@ -29,32 +29,36 @@ export default function CategoryPercentage() {
 
     return Object.keys(categoryAmounts).map((category) => ({
       category,
-      percentage: Math.round((categoryAmounts[category] / totalAmount) * 100),
+      percentage: parseFloat(
+        ((categoryAmounts[category] / totalAmount) * 100).toFixed(1)
+      ),
     }));
   }
 
   return (
-    <div className="flex justify-between gap-8">
-      <div className="flex flex-wrap gap-2">
+    <div className="gap-2 lg:gap-8 grid lg:grid-cols-2 text-sm">
+      <div className="flex gap-2 w-full">
         {calculateCategoryPercentage(incomeData).map((category) => (
           <div
             key={category.category}
             className={`bg-success p-2 rounded`}
             style={{
-              width: `${category.percentage}`,
+              width: `${category.percentage}%`,
+              minWidth: "160px",
             }}
           >
             {category.category}: {category.percentage}%
           </div>
         ))}
       </div>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex gap-2 w-full">
         {calculateCategoryPercentage(data).map((category) => (
           <div
             key={category.category}
             className={`bg-primary p-2 rounded`}
             style={{
-              width: `${category.percentage}`,
+              width: `${category.percentage}%`,
+              minWidth: "160px",
             }}
           >
             {category.category}: {category.percentage}%
