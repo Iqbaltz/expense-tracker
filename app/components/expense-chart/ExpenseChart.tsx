@@ -118,6 +118,7 @@ export default function ExpenseChart() {
     <div className="w-full h-80">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={aggregatedData}>
+          <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="date" tickFormatter={formatXAxis} minTickGap={0} />
           <YAxis tickFormatter={formatTick} width={40} />
           <Tooltip content={renderCustomTooltip} />

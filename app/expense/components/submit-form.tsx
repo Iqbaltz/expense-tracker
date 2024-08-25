@@ -45,7 +45,7 @@ export default function SubmitForm({}: Props) {
           type="number"
           name="amount"
           placeholder="Amount"
-          className="input"
+          className="bg-accent-content/5 input"
           required
         />
       </div>
@@ -53,7 +53,7 @@ export default function SubmitForm({}: Props) {
         <label className="label" htmlFor="category">
           Category
         </label>
-        <select className="select" name="category" required>
+        <select className="bg-accent-content/5 select" name="category" required>
           <option disabled selected value="">
             Select Category
           </option>
@@ -71,7 +71,12 @@ export default function SubmitForm({}: Props) {
         <label className="label" htmlFor="notes">
           Notes
         </label>
-        <input type="text" className="input" placeholder="Notes" name="notes" />
+        <input
+          type="text"
+          className="bg-accent-content/5 input"
+          placeholder="Notes"
+          name="notes"
+        />
       </div>
       <div className="form-control">
         <label className="label" htmlFor="date">
@@ -82,7 +87,7 @@ export default function SubmitForm({}: Props) {
           name="date"
           id="date"
           required
-          className="input"
+          className="bg-accent-content/5 input"
           placeholder="Date"
         />
       </div>

@@ -6,7 +6,7 @@ type Props = {};
 export default function ExpensePage({}: Props) {
   return (
     <div className="flex justify-center min-h-screen">
-      <div className="bg-neutral/30 mt-4 h-fit card">
+      <div className="shadow mt-4 h-fit card">
         <SubmitForm />
       </div>
     </div>
