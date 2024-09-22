@@ -129,7 +129,7 @@ export default function ExpenseChart() {
           />
           <Bar
             dataKey="expense"
-            fill="#8884d8"
+            fill="#FB8181"
             activeBar={<Rectangle fill="pink" stroke="blue" />}
           />
         </BarChart>

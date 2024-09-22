@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <main className="flex flex-col justify-between items-center p-4 md:p-24 min-h-screen">
       <div className="w-full max-w-5xl">
-        <h1 className="mb-8 text-xl">Expense Tracker</h1>
+        <h1 className="mb-8 text-xl">Catatan Pendapatan & Pengeluaran</h1>
         <ExpenseChart />
         <PaginationChart />
         <CategoryPercentage />

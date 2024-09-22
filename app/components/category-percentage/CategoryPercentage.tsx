@@ -41,7 +41,7 @@ export default function CategoryPercentage() {
         {calculateCategoryPercentage(incomeData).map((category) => (
           <div
             key={category.category}
-            className={`bg-success p-2 rounded`}
+            className={`bg-success text-white/75 p-2 rounded`}
             style={{
               width: `${category.percentage}%`,
               minWidth: "160px",
@@ -55,7 +55,7 @@ export default function CategoryPercentage() {
         {calculateCategoryPercentage(data).map((category) => (
           <div
             key={category.category}
-            className={`bg-primary p-2 rounded`}
+            className={`bg-error text-white/75 p-2 rounded`}
             style={{
               width: `${category.percentage}%`,
               minWidth: "160px",

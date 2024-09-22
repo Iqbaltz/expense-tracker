@@ -35,11 +35,11 @@ export default function SubmitForm({}: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="card-body">
-      <h1 className="card-title">Expense Page</h1>
+    <form onSubmit={handleSubmit} className="w-[90%] lg:w-[400px] card-body">
+      <h1 className="card-title">Isi Pengeluaran</h1>
       <div className="form-control">
         <label className="label" htmlFor="amount">
-          Amount
+          Jumlah
         </label>
         <input
           type="number"
@@ -51,11 +51,11 @@ export default function SubmitForm({}: Props) {
       </div>
       <div className="form-control">
         <label className="label" htmlFor="category">
-          Category
+          Kategori
         </label>
         <select className="bg-accent-content/5 select" name="category" required>
           <option disabled selected value="">
-            Select Category
+            Pilih Kategori
           </option>
 
           {Categories.map((category) => {
@@ -69,7 +69,7 @@ export default function SubmitForm({}: Props) {
       </div>
       <div className="form-control">
         <label className="label" htmlFor="notes">
-          Notes
+          Catatan
         </label>
         <input
           type="text"
@@ -80,7 +80,7 @@ export default function SubmitForm({}: Props) {
       </div>
       <div className="form-control">
         <label className="label" htmlFor="date">
-          Date
+          Tanggal
         </label>
         <input
           type="date"
@@ -91,7 +91,7 @@ export default function SubmitForm({}: Props) {
           placeholder="Date"
         />
       </div>
-      <button className="mt-3 btn">Add</button>
+      <button className="mt-4 text-white btn btn-error">Tambah</button>
     </form>
   );
 }
